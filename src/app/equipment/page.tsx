@@ -4,20 +4,26 @@ import Head from 'next/head';
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 
+interface Cost {
+  quantity: number;
+  unit: string
+}
+
 interface Equipment {
   index: string;
   name: string;
   equipmentCategory: string;
   gearCategory: string;
-  cost: string;
+  cost: Cost;
   weight: number;
 }
+
 
 interface RandomEquipment {
   name: string;
   equipmentCategory: string;
   gearCategory: string;
-  cost: string;
+  cost: Cost;
   weight: number;
 }
 
@@ -26,7 +32,7 @@ interface SelectedEquipment {
     name: string;
     equipmentCategory: string;
     gearCategory: string;
-    cost: string;
+    cost: Cost;
     weight: number;
 }
 
@@ -35,13 +41,15 @@ interface EquipmentColors {
     name: string;
     equipmentCategory: string;
     gearCategory: string;
-    cost: string;
+    cost: Cost;
     weight: number;
     nameColor: string 
     equipmentCategoryColor: string
-    gearColor: string
+    gearCategoryColor: string
     costColor: string 
     weightColor: string
+    costArrow: string 
+    weightArrow: string
 }
 
 const EquipmentPage = () => {
@@ -64,18 +72,19 @@ const EquipmentPage = () => {
       const randomIndex = Math.floor(Math.random() * data.results.length);
       const foundEquipment = data.results[randomIndex].index;
 
-      const secondResponse = await fetch(`https://www.dnd5eapi.co/api/monsters/${foundEquipment}`);
+      const secondResponse = await fetch(`https://www.dnd5eapi.co/api/equipment/${foundEquipment}`);
       const secondData = await secondResponse.json();
-      setRandomEquipment({
+
+      setRandomEquipment(await {
         name: secondData.name,
-        equipmentCategory: secondData.equipment_category.index,
-        gearCategory: secondData.gear_category.index,
+        equipmentCategory: secondData.equipment_category,
+        gearCategory: secondData.gear_category,
         cost: secondData.cost.toString() + secondData.cost.unit,
         weight: secondData.weight,
       });
       setLoading(false);
     } catch (error) {
-      console.error('Failed to fetch monsters', error);
+      console.error('Failed to fetch equipments', error);
       setLoading(false);
     }
   };
@@ -104,7 +113,7 @@ const EquipmentPage = () => {
 
   const handleSelectEquipment = async (equipment: Equipment) => {
     const tempEquipment = equipment.index;
-    const response = await fetch(`https://www.dnd5eapi.co/api/monsters/${tempEquipment}`);
+    const response = await fetch(`https://www.dnd5eapi.co/api/equipment/${tempEquipment}`);
     const data = await response.json();
     const equipmentToAdd: SelectedEquipment = {
       'index': data.index,
@@ -114,10 +123,11 @@ const EquipmentPage = () => {
       'cost': data.cost,
       'weight': data.weight,
     };
+    console.log('entriou')
 
     checkWin(equipmentToAdd)
 
-    const coloredEquipment = decideMonsterColors(equipmentToAdd);
+    const coloredEquipment = decideEquipmentColors(equipmentToAdd);
     setEquipmentColors([...equipmentColors, coloredEquipment]);
     
     const updatedEquipments = equipments.filter(oldEquipment => oldEquipment.index != equipment.index)
@@ -150,93 +160,122 @@ const EquipmentPage = () => {
   const red = "bg-red-600";
 
   const checkName = (equipmentName: string) => {
-    if (randomMonster) {      
-      if (monsterName !== randomMonster.name) {
+    if (randomEquipment) {      
+      if (equipmentName !== randomEquipment.name) {
         return red;
       }
       return green;
     }
   };
   
-  const checkSize = (monsterSize: string) => {
-    if (randomMonster) {      
-      if (monsterSize !== randomMonster.size) {
+  const checkEquipmentCategory = (equipmentCategory: string) => {
+    if (randomEquipment) {      
+      if (equipmentCategory !== randomEquipment.equipmentCategory) {
         return red;
       }
       return green;
     }
   };
 
-  const checkType = (monsterType: string) => {
-    if (randomMonster) {      
-      if (monsterType !== randomMonster.type) {
+  const checkGearCategory = (gearCategory: string) => {
+    if (randomEquipment) {      
+      if (gearCategory !== randomEquipment.gearCategory) {
         return red;
       }
       return green;
     }
   };
 
-  const checkHp = (monsterHp: number) => {
-    if (randomMonster) {      
-      if (monsterHp !== randomMonster.hit_points) {
+  const checkCost = (equimentCost: Cost) => {
+    if (randomEquipment) {      
+      if (equimentCost !== randomEquipment.cost) {
         return red;
       }
       return green;
     }
   };
 
-  const checkXp = (monsterXp: number) => {
-    if (randomMonster) {      
-      if (monsterXp !== randomMonster.xp) {
+  const checkWeight = (equipmentWeight: number) => {
+    if (randomEquipment) {      
+      if (equipmentWeight !== randomEquipment.weight) {
         return red;
       }
       return green;
     }
   };
 
-  const checkAc = (monsterAc: number) => {
-    if (randomMonster) {      
-      if (monsterAc !== randomMonster.ac) {
-        return red;
-      }
-      return green;
+  const decideEquipmentColors = (equipment: SelectedEquipment) => {
+    const nameColor = checkName(equipment.name) || '';
+    const equipmentCategoryColor = checkEquipmentCategory(equipment.equipmentCategory) || '';
+    const gearCategoryColor = checkGearCategory(equipment.gearCategory) || '';
+    const costColor = checkCost(equipment.cost) || '';
+    const weightColor = checkWeight(equipment.weight) || '';
+
+    console.log(typeof(equipment.cost))
+    const separatedSelectedCostQuantity: number = equipment.cost.quantity
+    const separatedSelectedCostUnit: string = equipment.cost.unit
+    let selectedCostMultiplier: number = 0
+    if (separatedSelectedCostUnit === 'cp') {
+      selectedCostMultiplier = 1
+    } 
+    if (separatedSelectedCostUnit === 'sp') {
+      selectedCostMultiplier = 10
+    } 
+    if (separatedSelectedCostUnit === 'ep') {
+      selectedCostMultiplier = 50
+    } 
+    if (separatedSelectedCostUnit === 'gp') {
+      selectedCostMultiplier = 100
+    } 
+    if (separatedSelectedCostUnit === 'pp') {
+      selectedCostMultiplier = 1000
     }
-  };
+    const selectedFinalCost = separatedSelectedCostQuantity * selectedCostMultiplier
+    
+    let randomFinalCost = 0
+    if (randomEquipment) {
+      const separatedRandomCostQuantity: number = randomEquipment.cost.quantity
+      const separatedRandomCostUnit: string = randomEquipment.cost.unit
+      let randomCostMultiplier: number = 0
+      if (separatedRandomCostUnit === 'cp') {
+        randomCostMultiplier = 1
+      } 
+      if (separatedRandomCostUnit === 'sp') {
+        randomCostMultiplier = 10
+      } 
+      if (separatedRandomCostUnit === 'ep') {
+        randomCostMultiplier = 50
+      } 
+      if (separatedRandomCostUnit === 'gp') {
+        randomCostMultiplier = 100
+      } 
+      if (separatedRandomCostUnit === 'pp') {
+        randomCostMultiplier = 1000
+      }
+      randomFinalCost = separatedRandomCostQuantity * randomCostMultiplier
+    }
 
-  const decideMonsterColors = (monster: SelectedMonster) => {
-    const nameColor = checkName(monster.name) || '';
-    const sizeColor = checkSize(monster.size) || '';
-    const typeColor = checkType(monster.type) || '';
-    const hpColor = checkHp(monster.hit_points) || '';
-    const xpColor = checkXp(monster.xp) || '';
-    const acColor = checkAc(monster.ac) || '';
 
+    const costArrow = selectedFinalCost > (randomFinalCost || 0) ? '↓' : selectedFinalCost < (randomFinalCost || 0) ? '↑' : '';
+    const weightArrow = equipment.weight > (randomEquipment?.weight || 0) ? '↓' : equipment.weight < (randomEquipment?.weight || 0) ? '↑' : '';
 
-    const hpArrow = monster.hit_points > (randomMonster?.hit_points || 0) ? '↓' : monster.hit_points < (randomMonster?.hit_points || 0) ? '↑' : '';
-    const xpArrow = monster.xp > (randomMonster?.xp || 0) ? '↓' : monster.xp < (randomMonster?.xp || 0) ? '↑' : '';
-    const acArrow = monster.ac > (randomMonster?.ac || 0) ? '↓' : monster.ac < (randomMonster?.ac || 0) ? '↑' : '';
-
-    const monsterColors: MonsterColors = {
-      index: monster.index,
-      name: monster.name,
-      size: monster.size,
-      type: monster.type,
-      hit_points: monster.hit_points,
-      xp: monster.xp,
-      ac: monster.ac,
-      img: monster.img,
+    const equipmentColors: EquipmentColors = {
+      index: equipment.index,
+      name: equipment.name,
+      equipmentCategory: equipment.equipmentCategory,
+      gearCategory: equipment.gearCategory,
+      cost: equipment.cost,
+      weight: equipment.weight,
       nameColor: nameColor, 
-      sizeColor: sizeColor,
-      typeColor: typeColor,
-      hpColor: hpColor,
-      xpColor: xpColor,
-      acColor: acColor,
-      hpArrow: hpArrow,
-      xpArrow: xpArrow,
-      acArrow: acArrow,
+      equipmentCategoryColor: equipmentCategoryColor,
+      gearCategoryColor: gearCategoryColor,
+      costColor: costColor,
+      weightColor: weightColor,
+      costArrow: costArrow,
+      weightArrow: weightArrow,
     };
 
-    return monsterColors;
+    return equipmentColors;
   };
 
   const handleBack = () => {
@@ -250,15 +289,15 @@ const EquipmentPage = () => {
   return (
     <div className="min-h-screen bg-dark-green text-light-beige flex flex-col items-center justify-center p-4 relative">
       <Head>
-        <title>Monster Minigame</title>
+        <title>Equipment Minigame</title>
       </Head>
-      <h1 className="text-4xl font-bold mb-8">Find out the monster</h1>
-      <p className="text-lg mb-12">Try to guess the random monster!</p>
+      <h1 className="text-4xl font-bold mb-8">Find out the equipment</h1>
+      <p className="text-lg mb-12">Try to guess the random equipment!</p>
 
-      {randomMonster && (
+      {randomEquipment && (
         <div className="mb-8">
-          <h2 className="text-2xl mb-4">Monstro Aleatório:</h2>
-          <div className="text-xl">{randomMonster.name}</div>
+          <h2 className="text-2xl mb-4">Equipamento Aleatório:</h2>
+          <div className="text-xl">{randomEquipment.name}</div>
         </div>
       )}
 
@@ -268,56 +307,50 @@ const EquipmentPage = () => {
           value={userInput}
           onChange={handleInputChange}
           className="bg-light-beige text-gray-800 px-4 py-2 rounded-lg w-full"
-          placeholder="Digite o nome do monstro"
+          placeholder="Try an equipment name"
         />
 
-        {filteredMonsters.length > 0 && (
+        {filteredEquipments.length > 0 && (
           <ul className="absolute z-10 w-full bg-light-beige text-gray-800 rounded-lg shadow-lg max-h-48 mt-1 overflow-y-auto">
-            {filteredMonsters.map(monster => (
+            {filteredEquipments.map(equipment => (
               <li
-                key={monster.index}
-                onClick={() => handleSelectMonster(monster)}
+                key={equipment.index}
+                onClick={() => handleSelectEquipment(equipment)}
                 className="cursor-pointer px-4 py-2 hover:bg-gray-200 flex justify-between"
               >
-                <span>{monster.name}</span> {monster.img !== '' ? <img className="h-[38px] w-[38px]" src={monster.img} alt={monster.img} /> : ''}
+                <span>{equipment.name}</span>
               </li>
             ))}
           </ul>
         )}
       </div>
 
-      {monsterColors.length > 0 && (
+      {equipmentColors.length > 0 && (
         <div className="w-full max-w-5xl mt-8 bg-light-beige text-gray-800 rounded-lg shadow-lg overflow-x-auto">
           <table className="w-full table-auto border-separate border-spacing-4 bg-dark-green opacity-100 shadow-md rounded-lg">
             <thead className="bg-gray-200 text-gray-800">
               <tr>
-                <th className="px-2 py-3">Image</th>
                 <th className="px-2 py-3">Name</th>
-                <th className="px-2 py-3">Size</th>
-                <th className="px-2 py-3">Type</th>
-                <th className="px-2 py-3">HP</th>
-                <th className="px-2 py-3">XP</th>
-                <th className="px-2 py-3">AC</th>
+                <th className="px-2 py-3">Equip. Category</th>
+                <th className="px-2 py-3">Gear Category</th>
+                <th className="px-2 py-3">Cost</th>
+                <th className="px-2 py-3">Weight</th>
               </tr>
             </thead>
             <tbody>
-              {monsterColors.toReversed().map(monster => (
+              {equipmentColors.toReversed().map(equipment => (
                 <tr
-                  key={monster.index}
+                  key={equipment.index}
                   className={`text-center items-center`}
                 >
-                  <td className={``}>{monster.img !== '' ? <img className="h-[42px] w-[42px] m-auto" src={monster.img}></img> : ''}</td>
-                  <td className={`py-3 ${monster.nameColor} text-gray-800`}>{monster.name}</td>
-                  <td className={`py-3 ${monster.sizeColor} text-gray-800`}>{monster.size}</td>
-                  <td className={`py-3 ${monster.typeColor} text-gray-800`}>{monster.type}</td>
-                  <td className={`py-3 ${monster.hpColor} text-gray-800`}>
-                    {monster.hit_points} <span className="ml-2">{monster.hpArrow}</span>
+                  <td className={`py-3 ${equipment.nameColor} text-gray-800`}>{equipment.name}</td>
+                  <td className={`py-3 ${equipment.equipmentCategoryColor} text-gray-800`}>{equipment.equipmentCategory}</td>
+                  <td className={`py-3 ${equipment.gearCategoryColor} text-gray-800`}>{equipment.gearCategory}</td>
+                  <td className={`py-3 ${equipment.costColor} text-gray-800`}>
+                    {equipment.cost.quantity + '' + equipment.cost.unit} <span className="ml-2">{equipment.costArrow}</span>
                     </td>
-                  <td className={`py-3 ${monster.xpColor} text-gray-800`}>
-                    {monster.xp} <span className="ml-2">{monster.xpArrow}</span>
-                    </td>
-                  <td className={`py-3 ${monster.acColor} text-gray-800`}>
-                    {monster.ac} <span className="ml-2">{monster.acArrow}</span>
+                  <td className={`py-3 ${equipment.weightColor} text-gray-800`}>
+                    {equipment.weight} <span className="ml-2">{equipment.weightArrow}</span>
                     </td>
                 </tr>
               ))}
@@ -329,9 +362,8 @@ const EquipmentPage = () => {
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-light-beige p-8 rounded-lg shadow-lg text-center text-black">
             <h2 className="text-2xl font-bold mb-4">Congratulations!</h2>
-            <p className="text-lg mb-4">You guessed the monster correctly!</p>
-            <p className="text-lg mb-4">The monster was: <span className="font-semibold">{randomMonster && randomMonster.name}</span></p>
-            {randomMonster && randomMonster.img && (<img src={randomMonster.img}></img>)}
+            <p className="text-lg mb-4">You guessed the equipment correctly!</p>
+            <p className="text-lg mb-4">The equipment was: <span className="font-semibold">{randomEquipment && randomEquipment.name}</span></p>
             <button
               onClick={() => router.push('/spell')}
               className="bg-green-600 hover:bg-green-700 text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
