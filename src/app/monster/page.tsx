@@ -67,10 +67,8 @@ const SpellPage = () => {
   const [randomMonster, setRandomMonster] = useState<RandomMonster | null>(null);
   const [userInput, setUserInput] = useState('');
   const [filteredMonsters, setFilteredMonsters] = useState<Monster[]>([]);
-  const [selectedMonsters, setSelectedMonsters] = useState<SelectedMonster[]>([]);
   const [monsterColors, setMonsterColors] = useState<MonsterColors[]>([]);
   const [loading, setLoading] = useState(true);
-  const [fadeKey, setFadeKey] = useState<number | null>(null);
   const [winBoard, setWinBoard] = useState<true | false>(false);
   const [tempMonstersWithImages, setTempMonstersWithImages] = useState<MonIma[]>([]);
   const router = useRouter();

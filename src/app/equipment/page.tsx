@@ -12,8 +12,7 @@ interface Cost {
 interface Equipment {
   index: string;
   name: string;
-  equipmentCategory: string;
-  gearCategory: string;
+  equipmentCategory: EquipmentCategory;
   cost: Cost;
   weight: number;
 }
@@ -21,8 +20,7 @@ interface Equipment {
 
 interface RandomEquipment {
   name: string;
-  equipmentCategory: string;
-  gearCategory: string;
+  equipmentCategory: EquipmentCategory;
   cost: Cost;
   weight: number;
 }
@@ -30,8 +28,7 @@ interface RandomEquipment {
 interface SelectedEquipment {
     index: string;
     name: string;
-    equipmentCategory: string;
-    gearCategory: string;
+    equipmentCategory: EquipmentCategory;
     cost: Cost;
     weight: number;
 }
@@ -39,18 +36,23 @@ interface SelectedEquipment {
 interface EquipmentColors {
     index: string;
     name: string;
-    equipmentCategory: string;
-    gearCategory: string;
+    equipmentCategory: EquipmentCategory;
     cost: Cost;
     weight: number;
     nameColor: string 
     equipmentCategoryColor: string
-    gearCategoryColor: string
     costColor: string 
     weightColor: string
     costArrow: string 
     weightArrow: string
 }
+
+interface EquipmentCategory {
+  index: string;
+  name: string;
+  url: string;
+}
+
 
 const EquipmentPage = () => {
   const [equipments, setEquipments] = useState<Equipment[]>([]);
@@ -78,8 +80,7 @@ const EquipmentPage = () => {
       setRandomEquipment(await {
         name: secondData.name,
         equipmentCategory: secondData.equipment_category,
-        gearCategory: secondData.gear_category,
-        cost: secondData.cost.toString() + secondData.cost.unit,
+        cost: {'quantity': secondData.cost.quantity, 'unit': secondData.cost.unit},
         weight: secondData.weight,
       });
       setLoading(false);
@@ -92,6 +93,7 @@ const EquipmentPage = () => {
   useEffect(() => {
     fetchEquipments();
   }, []);
+
 
   useEffect(() => {
     if (userInput === '') {
@@ -115,21 +117,19 @@ const EquipmentPage = () => {
     const tempEquipment = equipment.index;
     const response = await fetch(`https://www.dnd5eapi.co/api/equipment/${tempEquipment}`);
     const data = await response.json();
+
     const equipmentToAdd: SelectedEquipment = {
       'index': data.index,
       'name': data.name,
       'equipmentCategory': data.equipment_category,
-      'gearCategory': data.gear_category,
       'cost': data.cost,
       'weight': data.weight,
     };
-    console.log('entriou')
 
     checkWin(equipmentToAdd)
-
     const coloredEquipment = decideEquipmentColors(equipmentToAdd);
-    setEquipmentColors([...equipmentColors, coloredEquipment]);
     
+    setEquipmentColors([...equipmentColors, coloredEquipment]);
     const updatedEquipments = equipments.filter(oldEquipment => oldEquipment.index != equipment.index)
     setEquipments(updatedEquipments)
     setUserInput('');
@@ -138,15 +138,13 @@ const EquipmentPage = () => {
   const checkWin = (equipmentToAdd: SelectedEquipment) => {
     if (randomEquipment) {
       const checkedName = equipmentToAdd.name === randomEquipment.name
-      const checkedEquipmentCategory = equipmentToAdd.equipmentCategory === randomEquipment.equipmentCategory
-      const checkedGearCategory = equipmentToAdd.gearCategory === randomEquipment.gearCategory
-      const checkedCost = equipmentToAdd.cost === randomEquipment.cost
+      const checkedEquipmentCategory = equipmentToAdd.equipmentCategory.index === randomEquipment.equipmentCategory.index
+      const checkedCost = equipmentToAdd.cost.quantity === randomEquipment.cost.quantity && equipmentToAdd.cost.unit === randomEquipment.cost.unit
       const checkedWeight = equipmentToAdd.weight === randomEquipment.weight
 
       if (
         checkedName === true &&
         checkedEquipmentCategory === true &&
-        checkedGearCategory === true &&
         checkedCost === true &&
         checkedWeight === true
       ) {
@@ -168,27 +166,22 @@ const EquipmentPage = () => {
     }
   };
   
-  const checkEquipmentCategory = (equipmentCategory: string) => {
+  const checkEquipmentCategory = (equipmentCategory: EquipmentCategory) => {
     if (randomEquipment) {      
-      if (equipmentCategory !== randomEquipment.equipmentCategory) {
+      if (equipmentCategory.index !== randomEquipment.equipmentCategory.index) {
         return red;
       }
       return green;
     }
   };
 
-  const checkGearCategory = (gearCategory: string) => {
-    if (randomEquipment) {      
-      if (gearCategory !== randomEquipment.gearCategory) {
+  const checkCost = (equipmentCost: Cost) => {
+    if (randomEquipment) {    
+
+      if (equipmentCost.quantity !== randomEquipment.cost.quantity) {
         return red;
       }
-      return green;
-    }
-  };
-
-  const checkCost = (equimentCost: Cost) => {
-    if (randomEquipment) {      
-      if (equimentCost !== randomEquipment.cost) {
+      else if (equipmentCost.unit !== randomEquipment.cost.unit) {
         return red;
       }
       return green;
@@ -207,11 +200,9 @@ const EquipmentPage = () => {
   const decideEquipmentColors = (equipment: SelectedEquipment) => {
     const nameColor = checkName(equipment.name) || '';
     const equipmentCategoryColor = checkEquipmentCategory(equipment.equipmentCategory) || '';
-    const gearCategoryColor = checkGearCategory(equipment.gearCategory) || '';
     const costColor = checkCost(equipment.cost) || '';
     const weightColor = checkWeight(equipment.weight) || '';
 
-    console.log(typeof(equipment.cost))
     const separatedSelectedCostQuantity: number = equipment.cost.quantity
     const separatedSelectedCostUnit: string = equipment.cost.unit
     let selectedCostMultiplier: number = 0
@@ -263,12 +254,10 @@ const EquipmentPage = () => {
       index: equipment.index,
       name: equipment.name,
       equipmentCategory: equipment.equipmentCategory,
-      gearCategory: equipment.gearCategory,
       cost: equipment.cost,
       weight: equipment.weight,
       nameColor: nameColor, 
       equipmentCategoryColor: equipmentCategoryColor,
-      gearCategoryColor: gearCategoryColor,
       costColor: costColor,
       weightColor: weightColor,
       costArrow: costArrow,
@@ -332,7 +321,6 @@ const EquipmentPage = () => {
               <tr>
                 <th className="px-2 py-3">Name</th>
                 <th className="px-2 py-3">Equip. Category</th>
-                <th className="px-2 py-3">Gear Category</th>
                 <th className="px-2 py-3">Cost</th>
                 <th className="px-2 py-3">Weight</th>
               </tr>
@@ -344,8 +332,7 @@ const EquipmentPage = () => {
                   className={`text-center items-center`}
                 >
                   <td className={`py-3 ${equipment.nameColor} text-gray-800`}>{equipment.name}</td>
-                  <td className={`py-3 ${equipment.equipmentCategoryColor} text-gray-800`}>{equipment.equipmentCategory}</td>
-                  <td className={`py-3 ${equipment.gearCategoryColor} text-gray-800`}>{equipment.gearCategory}</td>
+                  <td className={`py-3 ${equipment.equipmentCategoryColor} text-gray-800`}>{equipment.equipmentCategory.name}</td>
                   <td className={`py-3 ${equipment.costColor} text-gray-800`}>
                     {equipment.cost.quantity + '' + equipment.cost.unit} <span className="ml-2">{equipment.costArrow}</span>
                     </td>
@@ -365,7 +352,7 @@ const EquipmentPage = () => {
             <p className="text-lg mb-4">You guessed the equipment correctly!</p>
             <p className="text-lg mb-4">The equipment was: <span className="font-semibold">{randomEquipment && randomEquipment.name}</span></p>
             <button
-              onClick={() => router.push('/spell')}
+              onClick={() => router.push('/')}
               className="bg-green-600 hover:bg-green-700 text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
             >
               Next
