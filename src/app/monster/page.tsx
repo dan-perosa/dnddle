@@ -109,8 +109,12 @@ const SpellPage = () => {
     fetchMonsters();
   }, [tempMonstersWithImages]);
 
+  function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   useEffect(() => {
-    setLoading(false);
+    sleep(10000).then(() => setLoading(false) )
   }, [randomMonster]);
 
   const startMonsterImages = async () => {
@@ -323,13 +327,6 @@ const SpellPage = () => {
       </Head>
       <h1 className="text-4xl font-bold mb-8">Find out the monster</h1>
       <p className="text-lg mb-12">Try to guess the random monster!</p>
-
-      {randomMonster && (
-        <div className="mb-8">
-          <h2 className="text-2xl mb-4">Random Monster:</h2>
-          <div className="text-xl">{randomMonster.name}</div>
-        </div>
-      )}
 
       <div className="relative w-full max-w-md">
         <input

@@ -283,13 +283,6 @@ const EquipmentPage = () => {
       <h1 className="text-4xl font-bold mb-8">Find out the equipment</h1>
       <p className="text-lg mb-12">Try to guess the random equipment!</p>
 
-      {randomEquipment && (
-        <div className="mb-8">
-          <h2 className="text-2xl mb-4">Equipamento Aleatório:</h2>
-          <div className="text-xl">{randomEquipment.name}</div>
-        </div>
-      )}
-
       <div className="relative w-full max-w-md">
         <input
           type="text"

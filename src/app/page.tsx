@@ -32,7 +32,7 @@ export default function HomePage() {
   };
 
   if (loading) {
-    return <div className="w-screen h-screen bg-dark-green text-gold flex items-center justify-center">Loading...</div>;
+    return <div className="w-screen h-screen bg-dark-green text-white flex items-center justify-center">Loading...</div>;
   }
 
   return (
