@@ -39,7 +39,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-dark-green text-light-beige flex items-center justify-center">
       <Head>
         <title>Welcome to D&D Wordle</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon3.ico" />
       </Head>
       <main className="text-center">
         <h1 className="text-4xl font-bold mb-8">Welcome to D&D Wordle!</h1>
