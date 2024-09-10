@@ -97,8 +97,8 @@ const SpellPage = () => {
         name: secondData.name,
         hitDie: secondData.hit_die,
         proficiencies: secondData.proficiencies,
-        savingThrows: secondData.savingThrows,
-        startingEquipment: secondData.startingEquipment,
+        savingThrows: secondData.saving_throws,
+        startingEquipment: secondData.starting_equipment,
       });
       setLoading(false);
     } catch (error) {
@@ -137,13 +137,13 @@ const SpellPage = () => {
     const classToAdd: SelectedClass = {
       'index': data.index,
       'name': data.name,
-      'hitDie': data.hitDie,
+      'hitDie': data.hit_die,
       'proficiencies': data.proficiencies,
       'savingThrows': data.saving_throws,
       'startingEquipment': data.starting_equipment,
     };
 
-    console.log(classToAdd)
+    console.log(randomClass)
 
     checkWin(classToAdd)
 
@@ -159,9 +159,13 @@ const SpellPage = () => {
     if (randomClass) {
       const checkedName = classToAdd.name === randomClass.name
       const checkedHitDie = classToAdd.hitDie === randomClass.hitDie
-      const checkedProficiencies = classToAdd.proficiencies === randomClass.proficiencies
-      const checkedSavingThrows = classToAdd.savingThrows === randomClass.savingThrows
-      const checkedStartingEquipment = classToAdd.startingEquipment === randomClass.startingEquipment
+      const checkedProficiencies = JSON.stringify(classToAdd.proficiencies) === JSON.stringify(randomClass.proficiencies)
+      const checkedSavingThrows = JSON.stringify(classToAdd.savingThrows) === JSON.stringify(randomClass.savingThrows)
+      const checkedStartingEquipment = JSON.stringify(classToAdd.startingEquipment) === JSON.stringify(randomClass.startingEquipment)
+
+      // console.log(checkedProficiencies, checkedSavingThrows, checkedStartingEquipment)
+      // console.log(JSON.stringify(classToAdd.savingThrows))
+      // console.log(JSON.stringify(randomClass.savingThrows))
 
       if (
         checkedName === true &&
@@ -197,28 +201,51 @@ const SpellPage = () => {
     }
   };
 
-  const checkProficiencies = (classProficiencies: object[]) => {
-    if (randomClass) {      
-      if (classProficiencies !== randomClass.proficiencies) {
-        return red;
+  const checkProficiencies = (classProficiencies: Proficiency[]) => {
+    if (randomClass) {   
+
+      const randomProficienciesListToOrangeCheck: string[] = randomClass.proficiencies.map(proficiency => proficiency.index)
+      const selectedProficienciesListToOrangeCheck: string[] = classProficiencies.map(proficiency => proficiency.index)
+    
+      const selectedProficienciesSet = new Set(selectedProficienciesListToOrangeCheck);
+
+      if (JSON.stringify(classProficiencies) !== JSON.stringify(randomClass.proficiencies)) {
+
+        const hasCommonProficiencies = randomProficienciesListToOrangeCheck.some(proficiencyIndex => selectedProficienciesSet.has(proficiencyIndex));
+        return hasCommonProficiencies ? red : orange;
       }
       return green;
     }
   };
 
-  const checkSavingThrows = (classSavingThrows: object[]) => {
+  const checkSavingThrows = (classSavingThrows: SavingThrows[]) => {
     if (randomClass) {      
-      if (classSavingThrows !== randomClass.savingThrows) {
-        return red;
+
+      const randomSavingThrowsListToOrangeCheck: string[] = randomClass.savingThrows.map(savingThrows => savingThrows.index)
+      const selectedSavingThrowsListToOrangeCheck: string[] = classSavingThrows.map(savingThrows => savingThrows.index)
+
+      const selectedSavingThrowsSet = new Set(selectedSavingThrowsListToOrangeCheck)
+
+      if (JSON.stringify(classSavingThrows) !== JSON.stringify(randomClass.savingThrows)) {
+
+        const hasCommonSavingThrows = randomSavingThrowsListToOrangeCheck.some(savingThrowIndex => selectedSavingThrowsSet.has(savingThrowIndex));
+        return hasCommonSavingThrows ? red : orange;
       }
       return green;
     }
   };
 
-  const checkStartingEquipment = (classStartingEquipment: object[]) => {
+  const checkStartingEquipment = (classStartingEquipment: StartingEquipment[]) => {
     if (randomClass) {      
-      if (classStartingEquipment !== randomClass.startingEquipment) {
-        return red;
+
+      const randomStartingEquipmentListToOrangeCheck: string[] = randomClass.startingEquipment.map(startingEquipment => startingEquipment.equipment.index)
+      const selectedStartingEquipmentListToOrangeCheck: string[] = classStartingEquipment.map(startingEquipment => startingEquipment.equipment.index)
+
+      const selectedStartingEquipmentSet = new Set(selectedStartingEquipmentListToOrangeCheck)
+
+      if (JSON.stringify(classStartingEquipment) !== JSON.stringify(randomClass.startingEquipment)) {
+        const hasCommonProficiencies = randomStartingEquipmentListToOrangeCheck.some(startingEquipmentIndex => selectedStartingEquipmentSet.has(startingEquipmentIndex));
+        return hasCommonProficiencies ? red : orange;
       }
       return green;
     }
@@ -322,9 +349,14 @@ const SpellPage = () => {
                   <td className={`py-3 ${classx.hitDieColor} text-gray-800`}>
                     {classx.hitDie}<span className="ml-2"> {classx.hitDieArrow}</span>
                     </td> 
-                  <td className={`py-3 ${classx.proficienciesColor} text-gray-800`}>{classx.proficiencies.map((proficienciesList: Proficiency) => proficienciesList.name.includes('Saving Throw')? '' : proficienciesList.name + ', ')}</td>
-                  <td className={`py-3 ${classx.savingThrowsColor} text-gray-800`}>{classx.savingThrows.map((savingThrowList: SavingThrows) => savingThrowList.name + ', ')}</td>
-                  <td className={`py-3 ${classx.startingEquipmentColor} text-gray-800`}>{classx.startingEquipment.map((startingEquipmentList: StartingEquipment) => startingEquipmentList.equipment.name + ', ')}</td>
+                    <td className={`py-3 ${classx.proficienciesColor} text-gray-800`}>
+                      {classx.proficiencies
+                        .filter((proficiency) => !proficiency.name.includes('Saving Throw'))
+                        .map((proficiency) => proficiency.name)
+                        .join(', ')}
+                    </td>
+                  <td className={`py-3 ${classx.savingThrowsColor} text-gray-800`}>{classx.savingThrows.map((savingThrowList: SavingThrows) => savingThrowList.name).join(', ')}</td>
+                  <td className={`py-3 ${classx.startingEquipmentColor} text-gray-800`}>{classx.startingEquipment.map((startingEquipmentList: StartingEquipment) => startingEquipmentList.equipment.name).join(', ')}</td>
                 </tr>
               ))}
             </tbody>
@@ -338,7 +370,7 @@ const SpellPage = () => {
             <p className="text-lg mb-4">You guessed the class correctly!</p>
             <p className="text-lg mb-4">The class was: <span className="font-semibold">{randomClass && randomClass.name}</span></p>
             <button
-              onClick={() => router.push('/spell')}
+              onClick={() => router.push('/equipment')}
               className="bg-green-600 hover:bg-green-700 text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
             >
               Next
@@ -351,7 +383,7 @@ const SpellPage = () => {
           onClick={handleBack}
           className="bg-gray-600 hover:bg-gray-700 text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
         >
-          Voltar
+          Back
         </button>
       </div>
     </div>

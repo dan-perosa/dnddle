@@ -375,7 +375,7 @@ const MonsterPage = () => {
             <p className="text-lg mb-4">You guessed the spell correctly!</p>
             <p className="text-lg mb-4">The spell was: <span className="font-semibold">{randomSpell && randomSpell.name}</span></p>
             <button
-              onClick={() => router.push('/spell')}
+              onClick={() => router.push('/class')}
               className="bg-green-600 hover:bg-green-700 text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
             >
               Next
@@ -388,7 +388,7 @@ const MonsterPage = () => {
           onClick={handleBack}
           className="bg-gray-600 hover:bg-gray-700 text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
         >
-          Voltar
+          Back
         </button>
       </div>
     </div>

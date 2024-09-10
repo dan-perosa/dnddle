@@ -355,7 +355,7 @@ const EquipmentPage = () => {
               onClick={() => router.push('/')}
               className="bg-green-600 hover:bg-green-700 text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
             >
-              Next
+              Finish
             </button>
           </div>
         </div>

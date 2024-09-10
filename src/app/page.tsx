@@ -32,18 +32,18 @@ export default function HomePage() {
   };
 
   if (loading) {
-    return <div className="w-screen h-screen bg-dark-green text-gold flex items-center justify-center">Carregando...</div>;
+    return <div className="w-screen h-screen bg-dark-green text-gold flex items-center justify-center">Loading...</div>;
   }
 
   return (
     <div className="min-h-screen bg-dark-green text-light-beige flex items-center justify-center">
       <Head>
-        <title>Bem-vindo ao D&D Wordle</title>
+        <title>Welcome to D&D Wordle</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="text-center">
-        <h1 className="text-4xl font-bold mb-8">Bem-vindo ao D&D Wordle!</h1>
-        <p className="text-lg mb-12">Escolha um minigame para começar:</p>
+        <h1 className="text-4xl font-bold mb-8">Welcome to D&D Wordle!</h1>
+        <p className="text-lg mb-12">Choose a minigame to start:</p>
         <div className="flex flex-col items-center space-y-4">
           <button
             onClick={handleMonsterClick}

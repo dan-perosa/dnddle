@@ -326,7 +326,7 @@ const SpellPage = () => {
 
       {randomMonster && (
         <div className="mb-8">
-          <h2 className="text-2xl mb-4">Monstro Aleatório:</h2>
+          <h2 className="text-2xl mb-4">Random Monster:</h2>
           <div className="text-xl">{randomMonster.name}</div>
         </div>
       )}
@@ -337,7 +337,7 @@ const SpellPage = () => {
           value={userInput}
           onChange={handleInputChange}
           className="bg-light-beige text-gray-800 px-4 py-2 rounded-lg w-full"
-          placeholder="Digite o nome do monstro"
+          placeholder="Guess the monster name"
         />
 
         {filteredMonsters.length > 0 && (
@@ -415,7 +415,7 @@ const SpellPage = () => {
           onClick={handleBack}
           className="bg-gray-600 hover:bg-gray-700 text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
         >
-          Voltar
+          Back
         </button>
       </div>
     </div>
