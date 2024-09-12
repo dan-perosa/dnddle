@@ -1,3 +1,28 @@
+# DNDdle: Your Daily D&D Guessing Game
+
+**DNDdle** is a fun and addictive daily word game inspired by popular titles like Wordle, Loldle, and Dotadle. But with a twist: it's all about *Dungeons & Dragons 5th Edition*!
+
+### How to Play
+1. **Guess the Monster:** Each day, a new monster is randomly selected from the D&D 5e API.
+2. **Make Your Guess:** Type in a monster name and hit enter.
+3. **Get Feedback:**
+   - **Correct:** The letter is in the correct place and is part of the monster's name.
+   - **Present:** The letter is in the monster's name but in the wrong place.
+   - **Absent:** The letter is not in the monster's name.
+4. **Repeat:** You have six tries to guess the correct monster!
+
+### Built With
+* **Next.js:** For a fast and scalable React framework.
+* **TypeScript:** For type safety and better code maintainability.
+* **Tailwind CSS:** For rapid UI development and customization.
+* **D&D 5e API:** Providing all monster data.
+
+### Development Setup
+1. **Clone the repository:**
+   ```bash
+   git clone [URL inválido removido]
+
+
 <<<<<<< HEAD
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
