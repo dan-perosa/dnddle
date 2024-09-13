@@ -22,4 +22,15 @@
 1. **Clone the repository:**
    ```bash
    git clone (https://github.com/dan-perosa/dnddle)
+   
+2. **Install dependecies:**
+   ```bash
+   cd dnddle
+   npm install
+   
+3. **Start the development server:**
+   ```bash
+   npm run dev
 
+### Contributing
+Feel free to contribute!
