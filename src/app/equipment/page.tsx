@@ -153,9 +153,9 @@ const EquipmentPage = () => {
     }
   }
 
-  const green = "bg-green-600";
+  const green = "bg-correct-answer";
   const orange = "bg-orange-600";
-  const red = "bg-red-600";
+  const red = "bg-wrong-answer";
 
   const checkName = (equipmentName: string) => {
     if (randomEquipment) {      
@@ -272,7 +272,7 @@ const EquipmentPage = () => {
   };
 
   if (loading) {
-    return <div className="w-screen h-screen bg-dark-green text-light-beige flex items-center justify-center">Carregando...</div>;
+    return <div className="w-screen h-screen bg-dark-green text-light-beige flex items-center justify-center">Loading...</div>;
   }
 
   return (
@@ -288,17 +288,17 @@ const EquipmentPage = () => {
           type="text"
           value={userInput}
           onChange={handleInputChange}
-          className="bg-light-beige text-gray-800 px-4 py-2 rounded-lg w-full"
+          className="bg-gray-600 text-light-beige px-4 py-2 rounded-lg w-full"
           placeholder="Try an equipment name"
         />
 
         {filteredEquipments.length > 0 && (
-          <ul className="absolute z-10 w-full bg-light-beige text-gray-800 rounded-lg shadow-lg max-h-48 mt-1 overflow-y-auto">
+          <ul className="absolute z-10 w-full bg-gray-800 text-light-beige rounded-lg shadow-lg max-h-48 mt-1 overflow-y-auto">
             {filteredEquipments.map(equipment => (
               <li
                 key={equipment.index}
                 onClick={() => handleSelectEquipment(equipment)}
-                className="cursor-pointer px-4 py-2 hover:bg-gray-200 flex justify-between"
+                className="cursor-pointer px-4 py-2 hover:bg-gray-600 flex justify-between"
               >
                 <span>{equipment.name}</span>
               </li>
@@ -308,9 +308,9 @@ const EquipmentPage = () => {
       </div>
 
       {equipmentColors.length > 0 && (
-        <div className="w-full max-w-5xl mt-8 bg-light-beige text-gray-800 rounded-lg shadow-lg overflow-x-auto">
-          <table className="w-full table-auto border-separate border-spacing-4 bg-dark-green opacity-100 shadow-md rounded-lg">
-            <thead className="bg-gray-200 text-gray-800">
+        <div className="w-full max-w-5xl mt-8 bg-light-beige text-light-beige rounded-lg shadow-lg overflow-x-auto">
+          <table className="w-full table-auto border-separate border-spacing-2 bg-dark-green opacity-100 shadow-md rounded-lg">
+            <thead className="bg-gray-200 text-light-beige">
               <tr>
                 <th className="px-2 py-3">Name</th>
                 <th className="px-2 py-3">Equip. Category</th>
@@ -324,12 +324,12 @@ const EquipmentPage = () => {
                   key={equipment.index}
                   className={`text-center items-center`}
                 >
-                  <td className={`py-3 ${equipment.nameColor} text-gray-800`}>{equipment.name}</td>
-                  <td className={`py-3 ${equipment.equipmentCategoryColor} text-gray-800`}>{equipment.equipmentCategory.name}</td>
-                  <td className={`py-3 ${equipment.costColor} text-gray-800`}>
+                  <td className={`py-3 ${equipment.nameColor} text-light-beige`}>{equipment.name}</td>
+                  <td className={`py-3 ${equipment.equipmentCategoryColor} text-light-beige`}>{equipment.equipmentCategory.name}</td>
+                  <td className={`py-3 ${equipment.costColor} text-light-beige`}>
                     {equipment.cost.quantity + '' + equipment.cost.unit} <span className="ml-2">{equipment.costArrow}</span>
                     </td>
-                  <td className={`py-3 ${equipment.weightColor} text-gray-800`}>
+                  <td className={`py-3 ${equipment.weightColor} text-light-beige`}>
                     {equipment.weight} <span className="ml-2">{equipment.weightArrow}</span>
                     </td>
                 </tr>
@@ -356,7 +356,7 @@ const EquipmentPage = () => {
       <div className="mt-8">
         <button
           onClick={handleBack}
-          className="bg-gray-600 hover:bg-gray-700 text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
+          className="bg-main-button hover:bg-main-button-hover text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
         >
           Voltar
         </button>

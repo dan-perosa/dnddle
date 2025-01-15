@@ -218,9 +218,9 @@ const SpellPage = () => {
     }
   }
 
-  const green = "bg-green-600";
+  const green = "bg-correct-answer";
   const orange = "bg-orange-600";
-  const red = "bg-red-600";
+  const red = "bg-wrong-answer";
 
   const checkName = (monsterName: string) => {
     if (randomMonster) {      
@@ -317,7 +317,7 @@ const SpellPage = () => {
   };
 
   if (loading) {
-    return <div className="w-screen h-screen bg-dark-green text-light-beige flex items-center justify-center">Carregando...</div>;
+    return <div className="w-screen h-screen bg-dark-green text-light-beige flex items-center justify-center">Loading...</div>;
   }
 
   return (
@@ -333,17 +333,17 @@ const SpellPage = () => {
           type="text"
           value={userInput}
           onChange={handleInputChange}
-          className="bg-light-beige text-gray-800 px-4 py-2 rounded-lg w-full"
+          className="bg-gray-600 text-light-beige px-4 py-2 rounded-lg w-full"
           placeholder="Guess the monster name"
         />
 
         {filteredMonsters.length > 0 && (
-          <ul className="absolute z-10 w-full bg-light-beige text-gray-800 rounded-lg shadow-lg max-h-48 mt-1 overflow-y-auto">
+          <ul className="absolute z-10 w-full bg-gray-800 text-light-beige rounded-lg shadow-lg max-h-48 mt-1 overflow-y-auto">
             {filteredMonsters.map(monster => (
               <li
                 key={monster.index}
                 onClick={() => handleSelectMonster(monster)}
-                className="cursor-pointer px-4 py-2 hover:bg-gray-200 flex justify-between"
+                className="cursor-pointer px-4 py-2 hover:bg-gray-600 flex justify-between"
               >
                 <span>{monster.name}</span> {monster.img !== '' ? <img className="h-[38px] w-[38px]" src={monster.img} alt={monster.img} /> : ''}
               </li>
@@ -353,9 +353,9 @@ const SpellPage = () => {
       </div>
 
       {monsterColors.length > 0 && (
-        <div className="w-full max-w-5xl mt-8 bg-light-beige text-gray-800 rounded-lg shadow-lg overflow-x-auto">
-          <table className="w-full table-auto border-separate border-spacing-4 bg-dark-green opacity-100 shadow-md rounded-lg">
-            <thead className="bg-gray-200 text-gray-800">
+        <div className="w-full max-w-5xl mt-8 text-light-beige rounded-lg shadow-lg overflow-x-auto">
+          <table className="w-full table-auto border-separate border-spacing-2 bg-dark-green opacity-100 shadow-md rounded-lg">
+            <thead className="bg-table-bg text-light-beige">
               <tr>
                 <th className="px-2 py-3">Image</th>
                 <th className="px-2 py-3">Name</th>
@@ -373,16 +373,16 @@ const SpellPage = () => {
                   className={`text-center items-center`}
                 >
                   <td className={``}>{monster.img !== '' ? <img className="h-[42px] w-[42px] m-auto" src={monster.img}></img> : ''}</td>
-                  <td className={`py-3 ${monster.nameColor} text-gray-800`}>{monster.name}</td>
-                  <td className={`py-3 ${monster.sizeColor} text-gray-800`}>{monster.size}</td>
-                  <td className={`py-3 ${monster.typeColor} text-gray-800`}>{monster.type}</td>
-                  <td className={`py-3 ${monster.hpColor} text-gray-800`}>
+                  <td className={`py-3 ${monster.nameColor} text-light-beige`}>{monster.name}</td>
+                  <td className={`py-3 ${monster.sizeColor} text-light-beige`}>{monster.size}</td>
+                  <td className={`py-3 ${monster.typeColor} text-light-beige`}>{monster.type}</td>
+                  <td className={`py-3 ${monster.hpColor} text-light-beige`}>
                     {monster.hit_points} <span className="ml-2">{monster.hpArrow}</span>
                     </td>
-                  <td className={`py-3 ${monster.xpColor} text-gray-800`}>
+                  <td className={`py-3 ${monster.xpColor} text-light-beige`}>
                     {monster.xp} <span className="ml-2">{monster.xpArrow}</span>
                     </td>
-                  <td className={`py-3 ${monster.acColor} text-gray-800`}>
+                  <td className={`py-3 ${monster.acColor} text-light-beige`}>
                     {monster.ac} <span className="ml-2">{monster.acArrow}</span>
                     </td>
                 </tr>
@@ -410,7 +410,7 @@ const SpellPage = () => {
       <div className="mt-8">
         <button
           onClick={handleBack}
-          className="bg-gray-600 hover:bg-gray-700 text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
+          className="bg-main-button hover:bg-main-button-hover text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
         >
           Back
         </button>

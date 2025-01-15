@@ -47,25 +47,25 @@ export default function HomePage() {
         <div className="flex flex-col items-center space-y-4">
           <button
             onClick={handleMonsterClick}
-            className="bg-forest-green hover:bg-moss-green text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
+            className="bg-main-button hover:bg-main-button-hover text-light-beige px-6 py-3 rounded-lg transition-colors duration-300 w-[130px]"
           >
             Monster
           </button>
           <button
             onClick={handleSpellClick}
-            className="bg-emerald-green hover:bg-jade-green text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
+            className="bg-main-button hover:bg-main-button-hover text-light-beige px-6 py-3 rounded-lg transition-colors duration-300 w-[130px]"
           >
             Spell
           </button>
           <button
             onClick={handleClassClick}
-            className="bg-burgundy hover:bg-ruby-red text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
+            className="bg-main-button hover:bg-main-button-hover text-light-beige px-6 py-3 rounded-lg transition-colors duration-300 w-[130px]"
           >
             Class
           </button>
           <button
             onClick={handleEquipmentClick}
-            className="bg-royal-blue hover:bg-sapphire-blue text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
+            className="bg-main-button hover:bg-main-button-hover text-light-beige px-6 py-3 rounded-lg transition-colors duration-300 w-[130px]"
           >
             Equipment
           </button>

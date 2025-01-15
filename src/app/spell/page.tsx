@@ -166,9 +166,9 @@ const MonsterPage = () => {
     }
   }
 
-  const green = "bg-green-600";
+  const green = "bg-correct-answer";
   const orange = "bg-orange-600";
-  const red = "bg-red-600";
+  const red = "bg-wrong-answer";
 
   const checkName = (spellName: string) => {
     if (randomSpell) {      
@@ -305,17 +305,17 @@ const MonsterPage = () => {
           type="text"
           value={userInput}
           onChange={handleInputChange}
-          className="bg-light-beige text-gray-800 px-4 py-2 rounded-lg w-full"
+          className="bg-gray-600 text-light-beige px-4 py-2 rounded-lg w-full"
           placeholder="Spell name"
         />
 
         {filteredSpells.length > 0 && (
-          <ul className="absolute z-10 w-full bg-light-beige text-gray-800 rounded-lg shadow-lg max-h-48 mt-1 overflow-y-auto">
+          <ul className="absolute z-10 w-full bg-gray-800 text-light-beige rounded-lg shadow-lg max-h-48 mt-1 overflow-y-auto">
             {filteredSpells.map(spell => (
               <li
                 key={spell.index}
                 onClick={() => handleSelectSpell(spell)}
-                className="cursor-pointer px-4 py-2 hover:bg-gray-200"
+                className="cursor-pointer px-4 py-2 hover:bg-gray-600"
               >
                 {spell.name}
               </li>
@@ -325,9 +325,9 @@ const MonsterPage = () => {
       </div>
 
       {spellColors.length > 0 && (
-        <div className="w-full max-w-5xl mt-8 bg-light-beige text-gray-800 rounded-lg shadow-lg overflow-x-auto">
-          <table className="w-full table-auto border-separate border-spacing-4 bg-dark-green opacity-100 shadow-md rounded-lg">
-            <thead className="bg-gray-200 text-gray-800">
+        <div className="w-full max-w-5xl mt-8 bg-light-beige text-light-beige rounded-lg shadow-lg overflow-x-auto">
+          <table className="w-full table-auto border-separate border-spacing-2 bg-dark-green opacity-100 shadow-md rounded-lg">
+            <thead className="bg-gray-200 text-light-beige">
               <tr>
                 <th className="px-6 py-3">Name</th>
                 <th className="px-6 py-3">Range</th>
@@ -344,17 +344,17 @@ const MonsterPage = () => {
                   key={spell.index}
                   className={`text-center`}
                 >
-                  <td className={`py-3 rounded-lg ${spell.nameColor} text-gray-800`}>{spell.name}</td>
-                  <td className={`py-3 rounded-lg ${spell.rangeColor} text-gray-800`}>
+                  <td className={`py-3 rounded-lg ${spell.nameColor} text-light-beige`}>{spell.name}</td>
+                  <td className={`py-3 rounded-lg ${spell.rangeColor} text-light-beige`}>
                     {spell.range} <span className="ml-2">{spell.rangeArrow}</span>
                     </td>
-                  <td className={`py-3 rounded-lg ${spell.ritualColor} text-gray-800`}>{spell.ritual == true ? 'Yes' : "No"}</td>
-                  <td className={`py-3 rounded-lg ${spell.durationColor} text-gray-800`}>{spell.duration}<span className="ml-2"></span></td>
-                  <td className={`py-3 rounded-lg ${spell.concentrationColor} text-gray-800`}>{spell.concentration == true ? 'Yes' : "No"}</td>
-                  <td className={`py-3 rounded-lg ${spell.levelColor} text-gray-800`}>
+                  <td className={`py-3 rounded-lg ${spell.ritualColor} text-light-beige`}>{spell.ritual == true ? 'Yes' : "No"}</td>
+                  <td className={`py-3 rounded-lg ${spell.durationColor} text-light-beige`}>{spell.duration}<span className="ml-2"></span></td>
+                  <td className={`py-3 rounded-lg ${spell.concentrationColor} text-light-beige`}>{spell.concentration == true ? 'Yes' : "No"}</td>
+                  <td className={`py-3 rounded-lg ${spell.levelColor} text-light-beige`}>
                     {spell.level} <span className="ml-2">{spell.levelArrow}</span>
                     </td>
-                  <td className={`py-3 rounded-lg ${spell.castingTimeColor} text-gray-800`}>{spell.castingTime}</td>
+                  <td className={`py-3 rounded-lg ${spell.castingTimeColor} text-light-beige`}>{spell.castingTime}</td>
                 </tr>
               ))}
             </tbody>
@@ -379,7 +379,7 @@ const MonsterPage = () => {
       <div className="mt-8">
         <button
           onClick={handleBack}
-          className="bg-gray-600 hover:bg-gray-700 text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
+          className="bg-main-button hover:bg-main-button-hover text-light-beige px-6 py-3 rounded-lg transition-colors duration-300"
         >
           Back
         </button>

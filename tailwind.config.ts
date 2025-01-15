@@ -14,17 +14,14 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
-        'dark-green': '#1b3a4b', // Fundo principal
+        'dark-green': '#212529', // Fundo principal
         'light-beige': '#f5f3e5', // Texto principal
-        'forest-green': '#2c6e49', // Botão Monster
-        'moss-green': '#4a773c', // Hover botão Monster
-        'emerald-green': '#4a7f5f', // Botão Spell
-        'jade-green': '#5a8d6c', // Hover botão Spell
-        'burgundy': '#6c2f27', // Botão Class
-        'ruby-red': '#7c3a2c', // Hover botão Class
-        'royal-blue': '#2a3a8c', // Botão Equipment
-        'sapphire-blue': '#3b5a9b', // Hover botão Equipment
-        'gold': '#d4af37' // Cor do texto no carregando
+        'gold': '#d4af37', // Cor do texto no Loading
+        'main-button': '#E63946',
+        'main-button-hover': '#F95738',
+        'table-bg': '#212529',
+        'wrong-answer': '#E63946',
+        'correct-answer': '#4DAA57'
       }
     },
   },
